@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repaso POO — Sección B</title>
+<style>
+:root{
+  --blue:#1769aa; --blue2:#0d47a1; --yellow:#ffd54f; --light:#f4f7fb;
+  --dark:#17202a; --green:#2e7d32; --red:#c62828; --purple:#6a1b9a;
+  --shadow:0 8px 25px rgba(0,0,0,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--light);color:var(--dark);line-height:1.55}
+header{
+  background:linear-gradient(135deg,var(--blue2),var(--blue));
+  color:white;padding:42px 7%;position:relative;overflow:hidden
+}
+header:after{content:"{}";position:absolute;right:7%;top:15px;font-size:130px;opacity:.08;font-weight:bold}
+header h1{margin:0 0 8px;font-size:clamp(30px,5vw,52px)}
+header p{margin:0;font-size:19px;max-width:850px}
+.container{max-width:1200px;margin:auto;padding:25px 5%}
+.progress-wrap{background:white;padding:15px 20px;border-radius:15px;box-shadow:var(--shadow);margin-bottom:22px}
+.progress{height:12px;background:#e5e7eb;border-radius:20px;overflow:hidden}
+.progress-bar{height:100%;width:7%;background:var(--yellow);transition:.4s}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:25px}
+nav button{
+  border:0;background:white;padding:10px 14px;border-radius:10px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);font-weight:bold;color:var(--blue2)
+}
+nav button.active,nav button:hover{background:var(--blue);color:white}
+.section{display:none;animation:fade .35s ease}.section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:white;border-radius:18px;padding:25px;margin:18px 0;box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.topic{
+  background:white;border-left:6px solid var(--blue);border-radius:14px;padding:20px;
+  box-shadow:0 5px 18px rgba(0,0,0,.07);cursor:pointer;transition:.2s
+}
+.topic:hover{transform:translateY(-3px)}
+.topic h3{margin-top:0}
+.badge{display:inline-block;padding:4px 9px;border-radius:20px;background:#e3f2fd;color:var(--blue2);font-size:12px;font-weight:bold}
+h2{color:var(--blue2);font-size:30px}
+h3{color:var(--blue2)}
+.tip{background:#fff8d6;border-left:5px solid var(--yellow);padding:15px;border-radius:10px}
+.success{background:#eaf6ec;border-left:5px solid var(--green);padding:15px;border-radius:10px}
+.warning{background:#fff0f0;border-left:5px solid var(--red);padding:15px;border-radius:10px}
+.code{
+  background:#17202a;color:#eaf2f8;border-radius:12px;padding:18px;
+  overflow:auto;font-family:Consolas,monospace;font-size:14px
+}
+.reveal{display:none;margin-top:12px}.reveal.show{display:block}
+.reveal-btn{
+  border:0;background:var(--blue);color:white;padding:9px 14px;border-radius:9px;cursor:pointer
+}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.compare>div{padding:18px;border-radius:14px;background:#f7f9fc}
+.uml{display:flex;justify-content:center;margin:15px 0}
+.uml-box{border:2px solid #222;width:330px;background:white}
+.uml-title{padding:10px;text-align:center;font-weight:bold;border-bottom:2px solid #222}
+.uml-row{padding:8px 12px;border-bottom:1px solid #777;font-family:monospace}
+.uml-row:last-child{border-bottom:0}
+.relations{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.rel{padding:18px;border-radius:14px;color:white;min-height:180px}
+.rel.assoc{background:#1976d2}.rel.dep{background:#607d8b}.rel.agg{background:#7b1fa2}.rel.comp{background:#ad1457}
+.quiz button.option{
+  display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border:2px solid #ddd;
+  background:white;border-radius:10px;cursor:pointer
+}
+.quiz button.option:hover{border-color:var(--blue)}
+.feedback{font-weight:bold;margin-top:10px}
+footer{text-align:center;padding:30px;color:#667}
+@media(max-width:700px){.compare{grid-template-columns:1fr}.container{padding:20px 4%}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Programación Orientada a Objetos</h1>
+  <p>Sección B · Repaso interactivo de las temáticas de la guía docente</p>
+</header>
+
+<div class="container">
+
+<div class="progress-wrap">
+  <strong id="progressText">Tema 1 de 9</strong>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+</div>
+
+<nav id="nav">
+  <button class="active" onclick="showSection(0)">Inicio</button>
+  <button onclick="showSection(1)">Clase y objeto</button>
+  <button onclick="showSection(2)">Encapsulamiento</button>
+  <button onclick="showSection(3)">Constructores</button>
+  <button onclick="showSection(4)">Get / Set</button>
+  <button onclick="showSection(5)">Sobrecarga</button>
+  <button onclick="showSection(6)">UML</button>
+  <button onclick="showSection(7)">SRP</button>
+  <button onclick="showSection(8)">Relaciones</button>
+</nav>
+
+<section class="section active">
+<div class="card">
+  <span class="badge">OBJETIVO</span>
+  <h2>¿Qué vamos a repasar?</h2>
+  <p>La guía de la Sección B organiza el contenido alrededor de <strong>Abstracción</strong> y
+  <strong>Encapsulamiento</strong>, y comienza la Unidad 3 con las <strong>relaciones entre clases</strong>.</p>
+  <div class="grid">
+    <div class="topic" onclick="showSection(1)"><h3>🧩 Abstracción</h3><p>Clase, objeto, atributos y métodos.</p></div>
+    <div class="topic" onclick="showSection(2)"><h3>🔐 Encapsulamiento</h3><p>Privacidad y acceso controlado.</p></div>
+    <div class="topic" onclick="showSection(5)"><h3>🔄 Sobrecarga</h3><p>Mismo nombre, diferentes parámetros.</p></div>
+    <div class="topic" onclick="showSection(6)"><h3>📐 UML</h3><p>Representar una clase gráficamente.</p></div>
+    <div class="topic" onclick="showSection(7)"><h3>🎯 SRP</h3><p>Una responsabilidad bien definida.</p></div>
+    <div class="topic" onclick="showSection(8)"><h3>🔗 Relaciones</h3><p>Asociación, dependencia, agregación y composición.</p></div>
+  </div>
+  <div class="tip"><strong>Dinámica para la clase:</strong> no memoricen únicamente definiciones. En cada tema intenten responder:
+  <em>¿cómo lo reconocería en un programa?</em> y <em>¿para qué me sirve?</em></div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 1 · ABSTRACCIÓN</span>
+<h2>Clase, objeto, atributos y métodos</h2>
+<div class="compare">
+<div><h3>Clase</h3><p>Es el <strong>molde o plantilla</strong> que define atributos y comportamientos.</p></div>
+<div><h3>Objeto</h3><p>Es una <strong>instancia concreta</strong> de una clase, con sus propios valores.</p></div>
+</div>
+<h3>Ejemplo</h3>
+<div class="code">class Vehiculo {
+    String marca;
+    String modelo;
+
+    void acelerar() {
+        System.out.println("El vehículo acelera");
+    }
+}
+
+Vehiculo carro = new Vehiculo();</div>
+<p><strong>Pregunta para los estudiantes:</strong> ¿Cuál es la clase y cuál es el objeto?</p>
+<button class="reveal-btn" onclick="toggle('r1')">Mostrar respuesta</button>
+<div id="r1" class="reveal success">La clase es <strong>Vehiculo</strong>. El objeto es <strong>carro</strong>, creado con <code>new Vehiculo()</code>.</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 2 · ENCAPSULAMIENTO</span>
+<h2>¿Qué significa encapsular?</h2>
+<p>El encapsulamiento consiste en proteger el estado interno de un objeto y controlar cómo se accede a sus datos.</p>
+<div class="grid">
+<div class="topic"><h3>🔒 private</h3><p>El atributo no se accede directamente desde cualquier parte.</p></div>
+<div class="topic"><h3>🌐 public</h3><p>Permite exponer métodos u operaciones que pueden ser utilizados desde fuera.</p></div>
+<div class="topic"><h3>🛡️ Control</h3><p>Los métodos pueden controlar cómo se consulta o modifica el estado.</p></div>
+</div>
+<h3>Antes vs. después</h3>
+<div class="compare">
+<div><strong>Menos control</strong><div class="code">public double saldo;</div></div>
+<div><strong>Encapsulado</strong><div class="code">private double saldo;
+
+public double getSaldo() {
+    return saldo;
+}</div></div>
+</div>
+<div class="tip"><strong>Idea clave:</strong> encapsular no significa simplemente escribir <code>private</code>.
+Significa controlar el acceso al estado del objeto.</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 2</span>
+<h2>Constructores</h2>
+<p>Un constructor permite inicializar un objeto cuando se crea.</p>
+<div class="code">public class Persona {
+    private String nombre;
+
+    public Persona(String nombre) {
+        this.nombre = nombre;
+    }
+}
+
+Persona p = new Persona("Ana");</div>
+<div class="grid">
+<div class="topic"><h3>1️⃣</h3><p>Se llama al crear el objeto.</p></div>
+<div class="topic"><h3>2️⃣</h3><p>Tiene el mismo nombre de la clase.</p></div>
+<div class="topic"><h3>3️⃣</h3><p>No se declara un tipo de retorno.</p></div>
+</div>
+<button class="reveal-btn" onclick="toggle('r2')">Pregunta rápida</button>
+<div id="r2" class="reveal success">En <code>new Persona("Ana")</code>, el constructor recibe "Ana" y la utiliza para inicializar el atributo <code>nombre</code>.</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 2 · ENCAPSULAMIENTO</span>
+<h2>Getters y Setters</h2>
+<p>Son métodos utilizados para consultar o modificar atributos encapsulados.</p>
+<div class="compare">
+<div>
+<h3>Getter</h3>
+<p>Obtiene un valor.</p>
+<div class="code">public String getNombre() {
+    return nombre;
+}</div>
+</div>
+<div>
+<h3>Setter</h3>
+<p>Modifica un valor.</p>
+<div class="code">public void setNombre(String nombre) {
+    this.nombre = nombre;
+}</div>
+</div>
+</div>
+<h3>⚠️ ¿Siempre debe existir un setter?</h3>
+<p>No necesariamente. Si un dato no debe modificarse después de establecerse, se puede proporcionar solo un getter.</p>
+<div class="tip"><strong>Ejemplo:</strong> un atributo como el año de publicación puede consultarse sin necesariamente permitir que se cambie.</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 2</span>
+<h2>Sobrecarga de métodos</h2>
+<p>Consiste en tener varios métodos con el <strong>mismo nombre</strong>, pero con una firma diferente, por ejemplo, distinta cantidad o tipo de parámetros.</p>
+<div class="code">public double calcularArea(double lado) {
+    return lado * lado;
+}
+
+public double calcularArea(double base, double altura) {
+    return base * altura;
+}</div>
+<div class="success"><strong>Recuerda:</strong> Java decide qué versión utilizar según los argumentos que se pasan al llamar el método.</div>
+<h3>🎮 Juego rápido</h3>
+<p>¿Cuál método se ejecutaría?</p>
+<div class="quiz">
+<button class="option" onclick="answer(this,true)">calcularArea(5)</button>
+<button class="option" onclick="answer(this,false)">calcularArea(5, 8) → método de un parámetro</button>
+<button class="option" onclick="answer(this,false)">calcularArea(5) → método de dos parámetros</button>
+<div class="feedback"></div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 2</span>
+<h2>UML: visualizar una clase</h2>
+<p>Un diagrama de clase UML permite representar la estructura de una clase mediante tres partes principales.</p>
+<div class="uml">
+<div class="uml-box">
+<div class="uml-title">Libro</div>
+<div class="uml-row">- titulo : String</div>
+<div class="uml-row">- autor : String</div>
+<div class="uml-row">- anioPublicacion : int</div>
+<div class="uml-row">- disponible : boolean</div>
+<div class="uml-row">+ Libro(titulo, autor, anioPublicacion)</div>
+<div class="uml-row">+ getTitulo() : String</div>
+<div class="uml-row">+ setTitulo(titulo : String) : void</div>
+<div class="uml-row">+ prestar() : void</div>
+</div>
+</div>
+<div class="grid">
+<div class="topic"><h3>− Privado</h3><p>Representa atributos o elementos privados.</p></div>
+<div class="topic"><h3>+ Público</h3><p>Representa elementos públicos.</p></div>
+<div class="topic"><h3>📦 3 compartimentos</h3><p>Nombre, atributos y métodos.</p></div>
+</div>
+<div class="tip"><strong>Reto:</strong> mirar el UML y preguntarse: "¿Cómo escribiría esta clase en Java?"</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 2 · SOLID</span>
+<h2>Principio de Responsabilidad Única — SRP</h2>
+<p>La idea central es que una clase tenga <strong>una única razón para cambiar</strong>, es decir, una responsabilidad bien definida.</p>
+<h3>🚨 Detectar el problema</h3>
+<div class="code">class Empleado {
+    calcularSalario();
+    generarReportePDF();
+    enviarCorreo();
+}</div>
+<p>Esta clase mezcla responsabilidades diferentes.</p>
+<h3>💡 Separar responsabilidades</h3>
+<div class="grid">
+<div class="topic"><h3>Empleado</h3><p>Datos y cálculo del salario.</p></div>
+<div class="topic"><h3>GeneradorReportePDF</h3><p>Generar reportes.</p></div>
+<div class="topic"><h3>ServicioCorreo</h3><p>Enviar correos.</p></div>
+</div>
+<div class="success"><strong>Pregunta para la clase:</strong> ¿qué tendría que cambiar si la empresa cambia el formato del PDF?
+<br>La respuesta ayuda a identificar por qué conviene separar responsabilidades.</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<span class="badge">UNIDAD 3 · RELACIONES ENTRE CLASES</span>
+<h2>Cuatro relaciones que debemos distinguir</h2>
+<div class="relations">
+<div class="rel assoc"><h3>🔗 Asociación</h3><p>Una clase se relaciona con otra. Ambas pueden existir independientemente.</p><strong>Idea: "se relaciona con"</strong></div>
+<div class="rel dep"><h3>↗️ Dependencia</h3><p>Una clase utiliza a otra temporalmente, por ejemplo, como parámetro de un método.</p><strong>Idea: "usa"</strong></div>
+<div class="rel agg"><h3>🟣 Agregación</h3><p>Un todo agrupa partes que pueden seguir existiendo por separado.</p><strong>Idea: "tiene un", relación débil</strong></div>
+<div class="rel comp"><h3>🔴 Composición</h3><p>El todo y sus partes tienen una dependencia fuerte dentro del modelo.</p><strong>Idea: "tiene un", relación fuerte</strong></div>
+</div>
+
+<h3>🧠 La pregunta que ayuda a distinguir agregación y composición</h3>
+<div class="tip"><strong>¿La parte puede existir y tener sentido por sí sola, separada del todo?</strong><br>
+Sí → <strong>agregación</strong>.<br>
+No → <strong>composición</strong>.</div>
+
+<h3>🎯 Clasifica</h3>
+<div class="quiz">
+<p><strong>Universidad — Estudiante</strong></p>
+<button class="option" onclick="relationAnswer(this,'agregación')">Agregación</button>
+<button class="option" onclick="relationAnswer(this,'composición')">Composición</button>
+<button class="option" onclick="relationAnswer(this,'asociación')">Asociación</button>
+<div class="feedback"></div>
+
+<p><strong>Biblioteca — Libro</strong></p>
+<button class="option" onclick="relationAnswer(this,'agregación')">Agregación</button>
+<button class="option" onclick="relationAnswer(this,'composición')">Composición</button>
+<button class="option" onclick="relationAnswer(this,'dependencia')">Dependencia</button>
+<div class="feedback"></div>
+</div>
+
+<div class="warning"><strong>Importante:</strong> la guía señala que algunas relaciones pueden generar debate según cómo se modele la situación.
+Lo importante es justificar por qué se escogió una relación.</div>
+</div>
+</section>
+
+<div class="card">
+<h2>🧩 Mapa mental del repaso</h2>
+<div class="grid">
+<div><strong>Abstracción</strong><br>Clase → Objeto → Atributos → Métodos</div>
+<div><strong>Encapsulamiento</strong><br>private → Constructor → get/set</div>
+<div><strong>Diseño</strong><br>Sobrecarga → UML → SRP</div>
+<div><strong>Relaciones</strong><br>Asociación → Dependencia → Agregación → Composición</div>
+</div>
+</div>
+
+</div>
+
+<footer>
+Repaso interactivo · POO · Sección B
+</footer>
+
+<script>
+const sections=document.querySelectorAll('.section');
+const navButtons=document.querySelectorAll('#nav button');
+function showSection(i){
+  sections.forEach((s,n)=>s.classList.toggle('active',n===i));
+  navButtons.forEach((b,n)=>b.classList.toggle('active',n===i));
+  const total=sections.length;
+  document.getElementById('progressText').textContent=`Tema ${i+1} de ${total}`;
+  document.getElementById('progressBar').style.width=((i+1)/total*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggle(id){document.getElementById(id).classList.toggle('show')}
+function answer(btn,correct){
+  const box=btn.parentElement;
+  const f=box.querySelector('.feedback');
+  f.textContent=correct?'✅ Correcto: se utiliza el método que recibe un solo parámetro.':'❌ Revisa la cantidad de parámetros. La llamada debe coincidir con una firma válida.';
+  f.style.color=correct?'#2e7d32':'#c62828';
+}
+function relationAnswer(btn,correct){
+  const box=btn.parentElement;
+  const f=btn.parentElement.querySelectorAll('.feedback')[0];
+  const chosen=btn.textContent.toLowerCase();
+  f.textContent=chosen===correct?'✅ Correcto. Ahora explica por qué la parte puede o no existir independientemente.':'❌ Revisa la diferencia entre las relaciones y, sobre todo, si la parte puede existir por separado.';
+  f.style.color=chosen===correct?'#2e7d32':'#c62828';
+}
+</script>
+</body>
+</html>
