@@ -1,0 +1,1906 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño y Programación Orientada a Objetos</title>
+
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+
+    body{
+        font-family: "Segoe UI", Arial, sans-serif;
+        background:#f4f6f8;
+        color:#202124;
+        line-height:1.6;
+    }
+
+    header{
+        background:linear-gradient(135deg,#111827,#263238);
+        color:white;
+        padding:55px 8%;
+        position:relative;
+        overflow:hidden;
+    }
+
+    header::after{
+        content:"{ }";
+        position:absolute;
+        right:8%;
+        top:10px;
+        font-size:170px;
+        color:rgba(255,255,255,.04);
+        font-weight:bold;
+    }
+
+    header h1{
+        font-size:clamp(2rem,5vw,4rem);
+        margin-bottom:12px;
+        position:relative;
+        z-index:2;
+    }
+
+    header p{
+        max-width:800px;
+        font-size:1.15rem;
+        color:#d1d5db;
+        position:relative;
+        z-index:2;
+    }
+
+    .container{
+        width:min(1200px,92%);
+        margin:auto;
+    }
+
+    nav{
+        position:sticky;
+        top:0;
+        z-index:100;
+        background:#ffffff;
+        border-bottom:1px solid #ddd;
+        box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .nav-inner{
+        width:min(1200px,95%);
+        margin:auto;
+        display:flex;
+        gap:8px;
+        overflow-x:auto;
+        padding:10px 0;
+    }
+
+    nav button{
+        border:none;
+        background:#eef1f4;
+        padding:10px 16px;
+        border-radius:20px;
+        cursor:pointer;
+        white-space:nowrap;
+        font-weight:600;
+        color:#374151;
+    }
+
+    nav button:hover,
+    nav button.active{
+        background:#111827;
+        color:white;
+    }
+
+    section{
+        padding:50px 0;
+    }
+
+    .section-title{
+        font-size:2rem;
+        margin-bottom:10px;
+        color:#111827;
+    }
+
+    .section-subtitle{
+        color:#667085;
+        margin-bottom:30px;
+    }
+
+    .card{
+        background:white;
+        border-radius:18px;
+        padding:25px;
+        margin-bottom:22px;
+        box-shadow:0 5px 20px rgba(0,0,0,.07);
+        border:1px solid #e5e7eb;
+    }
+
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        gap:20px;
+    }
+
+    .concept{
+        cursor:pointer;
+        transition:.25s;
+        position:relative;
+    }
+
+    .concept:hover{
+        transform:translateY(-4px);
+        box-shadow:0 12px 28px rgba(0,0,0,.12);
+    }
+
+    .concept h3{
+        margin-bottom:8px;
+    }
+
+    .tag{
+        display:inline-block;
+        background:#e8eefc;
+        color:#23408e;
+        padding:5px 10px;
+        border-radius:15px;
+        font-size:.8rem;
+        font-weight:bold;
+        margin-bottom:10px;
+    }
+
+    .code{
+        background:#111827;
+        color:#e5e7eb;
+        padding:20px;
+        border-radius:14px;
+        overflow-x:auto;
+        font-family:Consolas,monospace;
+        font-size:.92rem;
+        line-height:1.55;
+        margin:15px 0;
+        white-space:pre;
+    }
+
+    .keyword{color:#ff79c6;}
+    .type{color:#8be9fd;}
+    .method{color:#50fa7b;}
+    .comment{color:#8a8f98;}
+
+    .uml{
+        background:#fafafa;
+        border:2px solid #222;
+        border-radius:12px;
+        width:min(420px,100%);
+        margin:25px auto;
+        text-align:center;
+        overflow:hidden;
+    }
+
+    .uml .uml-title{
+        background:#111827;
+        color:white;
+        padding:13px;
+        font-weight:bold;
+    }
+
+    .uml .uml-section{
+        padding:14px;
+        border-top:1px solid #333;
+        text-align:left;
+        font-family:Consolas,monospace;
+    }
+
+    .arrow{
+        text-align:center;
+        font-size:40px;
+        color:#555;
+        margin:5px;
+    }
+
+    .relationship{
+        border-left:5px solid #111827;
+        padding:18px;
+        margin:15px 0;
+        background:#f8fafc;
+        border-radius:8px;
+    }
+
+    .relationship strong{
+        display:block;
+        margin-bottom:5px;
+    }
+
+    .highlight{
+        background:#fff7d6;
+        border-left:5px solid #f1c40f;
+        padding:18px;
+        border-radius:8px;
+        margin:20px 0;
+    }
+
+    .important{
+        background:#e9f7ef;
+        border-left:5px solid #20a464;
+        padding:18px;
+        border-radius:8px;
+        margin:20px 0;
+    }
+
+    .danger{
+        background:#fff0f0;
+        border-left:5px solid #dc3545;
+        padding:18px;
+        border-radius:8px;
+        margin:20px 0;
+    }
+
+    .tabs{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin-bottom:15px;
+    }
+
+    .tab-btn{
+        padding:10px 15px;
+        border:none;
+        border-radius:8px;
+        background:#e5e7eb;
+        cursor:pointer;
+        font-weight:600;
+    }
+
+    .tab-btn.active{
+        background:#111827;
+        color:white;
+    }
+
+    .tab-content{
+        display:none;
+    }
+
+    .tab-content.active{
+        display:block;
+    }
+
+    .reveal{
+        display:none;
+        margin-top:15px;
+    }
+
+    .reveal.show{
+        display:block;
+    }
+
+    .btn{
+        border:none;
+        padding:11px 18px;
+        border-radius:9px;
+        cursor:pointer;
+        background:#111827;
+        color:white;
+        font-weight:bold;
+        margin-top:10px;
+    }
+
+    .btn:hover{
+        opacity:.88;
+    }
+
+    .choice{
+        display:block;
+        width:100%;
+        text-align:left;
+        padding:15px;
+        margin:8px 0;
+        border:2px solid #e5e7eb;
+        background:white;
+        border-radius:10px;
+        cursor:pointer;
+    }
+
+    .choice:hover{
+        border-color:#111827;
+    }
+
+    .correct{
+        background:#dcfce7 !important;
+        border-color:#16a34a !important;
+    }
+
+    .incorrect{
+        background:#fee2e2 !important;
+        border-color:#dc2626 !important;
+    }
+
+    .result{
+        margin-top:15px;
+        font-weight:bold;
+    }
+
+    .progress{
+        height:8px;
+        background:#e5e7eb;
+        border-radius:10px;
+        overflow:hidden;
+        margin:15px 0;
+    }
+
+    .progress-bar{
+        width:0%;
+        height:100%;
+        background:#111827;
+        transition:.5s;
+    }
+
+    .compare{
+        width:100%;
+        border-collapse:collapse;
+        margin-top:20px;
+        background:white;
+    }
+
+    .compare th,
+    .compare td{
+        border:1px solid #ddd;
+        padding:13px;
+        text-align:left;
+    }
+
+    .compare th{
+        background:#111827;
+        color:white;
+    }
+
+    .flip-container{
+        perspective:1000px;
+        cursor:pointer;
+    }
+
+    .flip-card{
+        min-height:180px;
+        position:relative;
+        transform-style:preserve-3d;
+        transition:.6s;
+    }
+
+    .flip-container.flipped .flip-card{
+        transform:rotateY(180deg);
+    }
+
+    .flip-front,
+    .flip-back{
+        position:absolute;
+        width:100%;
+        min-height:180px;
+        backface-visibility:hidden;
+        border-radius:15px;
+        padding:25px;
+        background:white;
+        box-shadow:0 5px 18px rgba(0,0,0,.08);
+    }
+
+    .flip-back{
+        transform:rotateY(180deg);
+        background:#111827;
+        color:white;
+    }
+
+    footer{
+        background:#111827;
+        color:#d1d5db;
+        text-align:center;
+        padding:35px;
+        margin-top:30px;
+    }
+
+    .small{
+        font-size:.9rem;
+        color:#6b7280;
+    }
+
+    .big-question{
+        font-size:1.35rem;
+        font-weight:700;
+        margin-bottom:20px;
+    }
+
+    .checklist{
+        list-style:none;
+    }
+
+    .checklist li{
+        margin:10px 0;
+        padding:12px;
+        background:#f8fafc;
+        border-radius:8px;
+    }
+
+    .checklist li::before{
+        content:"✓";
+        font-weight:bold;
+        margin-right:10px;
+        color:#16a34a;
+    }
+
+    @media(max-width:600px){
+        header{
+            padding:40px 5%;
+        }
+
+        section{
+            padding:35px 0;
+        }
+
+        .card{
+            padding:18px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header id="inicio">
+    <div class="container">
+        <span class="tag">PROGRAMACIÓN ORIENTADA A OBJETOS</span>
+        <h1>Herencia, LSP y Polimorfismo</h1>
+        <p>
+            Vamos a pasar de tener clases relacionadas a construir
+            <strong>jerarquías de clases</strong> donde una clase puede
+            reutilizar, especializar y redefinir el comportamiento de otra.
+        </p>
+    </div>
+</header>
+
+<nav>
+    <div class="nav-inner">
+        <button onclick="irA('inicio')" class="active">Inicio</button>
+        <button onclick="irA('herencia')">Herencia</button>
+        <button onclick="irA('extends')">extends</button>
+        <button onclick="irA('super')">super</button>
+        <button onclick="irA('protected')">protected</button>
+        <button onclick="irA('uml')">UML</button>
+        <button onclick="irA('lsp')">LSP</button>
+        <button onclick="irA('taller')">Taller</button>
+        <button onclick="irA('polimorfismo')">Polimorfismo</button>
+        <button onclick="irA('reto')">Reto</button>
+    </div>
+</nav>
+
+<main>
+
+<!-- INTRODUCCIÓN -->
+
+<section id="intro">
+<div class="container">
+
+<h2 class="section-title">¿Dónde estamos?</h2>
+<p class="section-subtitle">
+Ya conocemos diferentes formas de relacionar clases. Ahora vamos a estudiar
+una relación especialmente importante: <strong>la herencia</strong>.
+</p>
+
+<div class="grid">
+
+<div class="card concept">
+<span class="tag">ANTES</span>
+<h3>Relaciones entre clases</h3>
+<p>
+Las clases podían relacionarse mediante asociación, dependencia,
+agregación y composición.
+</p>
+</div>
+
+<div class="card concept">
+<span class="tag">AHORA</span>
+<h3>Herencia</h3>
+<p>
+Una clase puede tomar como base otra clase y especializar su comportamiento.
+</p>
+</div>
+
+<div class="card concept">
+<span class="tag">DESPUÉS</span>
+<h3>Polimorfismo</h3>
+<p>
+Una misma operación puede producir comportamientos diferentes
+dependiendo del objeto que la ejecute.
+</p>
+</div>
+
+</div>
+
+<div class="highlight">
+<strong>Idea central:</strong><br>
+La herencia no significa simplemente "copiar código".
+Representa una relación conceptual donde una clase especializada
+puede ser tratada como una instancia de una clase más general.
+</div>
+
+</div>
+</section>
+
+
+<!-- HERENCIA -->
+
+<section id="herencia">
+<div class="container">
+
+<h2 class="section-title">1. ¿Qué es la herencia?</h2>
+
+<p class="section-subtitle">
+La herencia permite crear una nueva clase a partir de otra existente.
+</p>
+
+<div class="card">
+
+<h3>Piensa en una clasificación</h3>
+
+<p>
+Supongamos que tenemos diferentes tipos de empleados:
+</p>
+
+<div class="uml">
+<div class="uml-title">Empleado</div>
+<div class="uml-section">
+- nombre<br>
+- salario<br><br>
++ trabajar()
+</div>
+</div>
+
+<div class="arrow">↓</div>
+
+<div class="grid">
+
+<div class="uml">
+<div class="uml-title">Gerente</div>
+<div class="uml-section">
+- departamento<br><br>
++ trabajar()<br>
++ dirigir()
+</div>
+</div>
+
+<div class="uml">
+<div class="uml-title">Operario</div>
+<div class="uml-section">
+- turno<br><br>
++ trabajar()<br>
++ operarMaquina()
+</div>
+</div>
+
+</div>
+
+<p style="margin-top:20px;">
+<strong>Empleado</strong> es la clase general.
+<strong>Gerente</strong> y <strong>Operario</strong> son especializaciones.
+</p>
+
+</div>
+
+<div class="grid">
+
+<div class="card concept" onclick="mostrar('generalizacion')">
+<h3>Generalización</h3>
+<p>
+Partimos de clases específicas para identificar características comunes
+y llevarlas a una clase más general.
+</p>
+<div id="generalizacion" class="reveal">
+<strong>Ejemplo:</strong> Gerente y Operario tienen nombre, identificación,
+salario y comportamiento laboral. Esas características pueden pertenecer
+a Empleado.
+</div>
+</div>
+
+<div class="card concept" onclick="mostrar('especializacion')">
+<h3>Especialización</h3>
+<p>
+Partimos de una clase general y creamos clases más específicas.
+</p>
+<div id="especializacion" class="reveal">
+<strong>Ejemplo:</strong> Un Gerente es un Empleado, pero además tiene
+responsabilidades propias de su rol.
+</div>
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- EXTENDS -->
+
+<section id="extends">
+<div class="container">
+
+<h2 class="section-title">2. La palabra clave <code>extends</code></h2>
+
+<p class="section-subtitle">
+En Java, <code>extends</code> indica que una clase hereda de otra.
+</p>
+
+<div class="card">
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    String nombre;
+    <span class="keyword">double</span> salario;
+
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+        System.out.println(<span class="comment">"El empleado está trabajando"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    String departamento;
+
+    <span class="keyword">void</span> <span class="method">dirigir</span>() {
+        System.out.println(<span class="comment">"El gerente está dirigiendo"</span>);
+    }
+}</div>
+
+<div class="important">
+<strong>¿Qué significa?</strong><br>
+Gerente hereda de Empleado. Por lo tanto, un objeto Gerente puede utilizar
+los miembros heredados que sean accesibles.
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>La relación se puede leer así:</h3>
+
+<div class="highlight">
+<strong>Gerente ES UN Empleado.</strong>
+</div>
+
+<p>
+Esta frase es muy importante cuando estamos diseñando una jerarquía.
+Si no podemos expresar razonablemente la relación como
+<strong>"X es un Y"</strong>, probablemente no estamos frente a una
+buena relación de herencia.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Probemos mentalmente</h3>
+
+<div class="big-question">
+¿Un Gerente puede ser tratado como un Empleado?
+</div>
+
+<button class="choice" onclick="respuesta(this,true,'r1')">
+Sí, porque Gerente hereda de Empleado.
+</button>
+
+<button class="choice" onclick="respuesta(this,false,'r1')">
+No, porque Gerente tiene atributos diferentes.
+</button>
+
+<div id="r1" class="result"></div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- SUPER -->
+
+<section id="super">
+<div class="container">
+
+<h2 class="section-title">3. La palabra clave <code>super</code></h2>
+
+<p class="section-subtitle">
+<code>super</code> permite acceder a elementos de la superclase.
+</p>
+
+<div class="tabs">
+
+<button class="tab-btn active" onclick="tab(event,'super1')">
+Constructor
+</button>
+
+<button class="tab-btn" onclick="tab(event,'super2')">
+Método
+</button>
+
+</div>
+
+<div id="super1" class="tab-content active">
+
+<div class="card">
+
+<h3>Llamar al constructor de la superclase</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">protected</span> String nombre;
+
+    <span class="type">Empleado</span>(String nombre) {
+        <span class="keyword">this</span>.nombre = nombre;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    String departamento;
+
+    <span class="type">Gerente</span>(String nombre, String departamento) {
+
+        <span class="keyword">super</span>(nombre);
+
+        <span class="keyword">this</span>.departamento = departamento;
+    }
+}</div>
+
+<p>
+<strong>super(nombre)</strong> llama al constructor de Empleado.
+</p>
+
+</div>
+
+</div>
+
+<div id="super2" class="tab-content">
+
+<div class="card">
+
+<h3>Llamar a un método de la superclase</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+        System.out.println(<span class="comment">"Trabajo general"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+
+        <span class="keyword">super</span>.trabajar();
+
+        System.out.println(<span class="comment">"Además, coordino el equipo"</span>);
+    }
+}</div>
+
+<p>
+Aquí <code>super.trabajar()</code> permite conservar el comportamiento
+de la superclase y agregar comportamiento específico.
+</p>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- PROTECTED -->
+
+<section id="protected">
+<div class="container">
+
+<h2 class="section-title">4. El modificador <code>protected</code></h2>
+
+<p class="section-subtitle">
+Una herramienta importante cuando trabajamos con herencia.
+</p>
+
+<div class="card">
+
+<table class="compare">
+
+<tr>
+<th>Modificador</th>
+<th>Idea principal</th>
+</tr>
+
+<tr>
+<td><code>private</code></td>
+<td>Acceso restringido a la propia clase.</td>
+</tr>
+
+<tr>
+<td><code>protected</code></td>
+<td>Accesible desde la clase y desde sus subclases, además de las reglas de acceso de paquete.</td>
+</tr>
+
+<tr>
+<td><code>public</code></td>
+<td>Accesible desde cualquier lugar donde sea visible la clase.</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h3>Ejemplo</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">protected</span> <span class="keyword">double</span> salario;
+
+}
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">void</span> <span class="method">mostrarSalario</span>() {
+
+        System.out.println(salario);
+
+    }
+}</div>
+
+<div class="highlight">
+<strong>Pero cuidado:</strong> protected no significa "todo vale".
+La visibilidad sigue siendo parte del diseño de la clase.
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- UML -->
+
+<section id="uml">
+<div class="container">
+
+<h2 class="section-title">5. Herencia en UML</h2>
+
+<p class="section-subtitle">
+En UML la herencia se representa mediante una línea con un triángulo vacío
+que apunta hacia la superclase.
+</p>
+
+<div class="card">
+
+<div style="text-align:center;font-size:1.1rem;">
+
+<div class="uml">
+<div class="uml-title">Empleado</div>
+<div class="uml-section">
+- nombre : String<br>
+- salario : double<br><br>
++ trabajar() : void
+</div>
+</div>
+
+<div style="font-size:45px;">△</div>
+
+<div class="grid">
+
+<div class="uml">
+<div class="uml-title">Gerente</div>
+<div class="uml-section">
+- departamento : String<br><br>
++ dirigir() : void
+</div>
+</div>
+
+<div class="uml">
+<div class="uml-title">Operario</div>
+<div class="uml-section">
+- turno : String<br><br>
++ operarMaquina() : void
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="important">
+<strong>Recuerda la dirección:</strong><br>
+El triángulo apunta hacia la clase más general.
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>¿Por qué usar herencia?</h3>
+
+<div class="grid">
+
+<div>
+<strong>Reutilización</strong>
+<p class="small">Permite aprovechar características comunes.</p>
+</div>
+
+<div>
+<strong>Organización</strong>
+<p class="small">Permite construir jerarquías conceptuales.</p>
+</div>
+
+<div>
+<strong>Especialización</strong>
+<p class="small">Las subclases pueden agregar comportamiento propio.</p>
+</div>
+
+<div>
+<strong>Polimorfismo</strong>
+<p class="small">Permite trabajar con objetos especializados desde referencias generales.</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- TALLER -->
+
+<section id="taller">
+<div class="container">
+
+<h2 class="section-title">6. Taller: Jerarquía de empleados</h2>
+
+<p class="section-subtitle">
+Construyamos una jerarquía sencilla en Java.
+</p>
+
+<div class="card">
+
+<h3>La situación</h3>
+
+<p>
+Una empresa tiene diferentes tipos de empleados.
+Todos comparten información básica, pero cada tipo puede tener
+comportamientos particulares.
+</p>
+
+<div class="uml">
+<div class="uml-title">Empleado</div>
+<div class="uml-section">
+# nombre : String<br>
+# salarioBase : double<br><br>
++ trabajar() : void
+</div>
+</div>
+
+<div class="arrow">↓</div>
+
+<div class="grid">
+
+<div class="uml">
+<div class="uml-title">Gerente</div>
+<div class="uml-section">
+- bono : double<br><br>
++ dirigir() : void
+</div>
+</div>
+
+<div class="uml">
+<div class="uml-title">Operario</div>
+<div class="uml-section">
+- horasExtra : int<br><br>
++ operar() : void
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Una posible implementación</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">protected</span> String nombre;
+    <span class="keyword">protected</span> <span class="keyword">double</span> salarioBase;
+
+    <span class="type">Empleado</span>(String nombre, <span class="keyword">double</span> salarioBase) {
+        <span class="keyword">this</span>.nombre = nombre;
+        <span class="keyword">this</span>.salarioBase = salarioBase;
+    }
+
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+        System.out.println(nombre + <span class="comment">" está trabajando"</span>);
+    }
+}</div>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">private</span> <span class="keyword">double</span> bono;
+
+    <span class="type">Gerente</span>(
+        String nombre,
+        <span class="keyword">double</span> salarioBase,
+        <span class="keyword">double</span> bono
+    ) {
+
+        <span class="keyword">super</span>(nombre, salarioBase);
+        <span class="keyword">this</span>.bono = bono;
+    }
+
+    <span class="keyword">void</span> <span class="method">dirigir</span>() {
+        System.out.println(<span class="comment">"El gerente dirige el equipo"</span>);
+    }
+}</div>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Operario</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">private</span> <span class="keyword">int</span> horasExtra;
+
+    <span class="type">Operario</span>(
+        String nombre,
+        <span class="keyword">double</span> salarioBase,
+        <span class="keyword">int</span> horasExtra
+    ) {
+
+        <span class="keyword">super</span>(nombre, salarioBase);
+        <span class="keyword">this</span>.horasExtra = horasExtra;
+    }
+
+    <span class="keyword">void</span> <span class="method">operar</span>() {
+        System.out.println(<span class="comment">"El operario trabaja en producción"</span>);
+    }
+}</div>
+
+</div>
+
+<div class="card">
+
+<h3>Ahora pensemos como diseñadores</h3>
+
+<ul class="checklist">
+<li>¿Qué atributos realmente pertenecen a todos los empleados?</li>
+<li>¿Qué comportamientos son comunes?</li>
+<li>¿Qué comportamientos son específicos?</li>
+<li>¿Qué información debería estar protegida?</li>
+<li>¿Qué comportamiento podría cambiar en cada subclase?</li>
+</ul>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- LSP -->
+
+<section id="lsp">
+<div class="container">
+
+<h2 class="section-title">7. Principio de Sustitución de Liskov</h2>
+
+<p class="section-subtitle">
+LSP: una subclase debe poder utilizarse allí donde se espera su superclase
+sin romper las expectativas del programa.
+</p>
+
+<div class="card">
+
+<h3>La pregunta clave</h3>
+
+<div class="highlight">
+<strong>
+Si tengo un objeto de la subclase, ¿puedo utilizarlo como si fuera
+un objeto de la superclase sin que el programa deje de comportarse
+correctamente?
+</strong>
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Un ejemplo clásico: vehículos</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Ave</span> {
+
+    <span class="keyword">void</span> <span class="method">volar</span>() {
+        System.out.println(<span class="comment">"Estoy volando"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Aguila</span> <span class="keyword">extends</span> <span class="type">Ave</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">void</span> <span class="method">volar</span>() {
+        System.out.println(<span class="comment">"El águila vuela"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Pinguino</span> <span class="keyword">extends</span> <span class="type">Ave</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">void</span> <span class="method">volar</span>() {
+        <span class="comment">// ¿Qué hacemos aquí?</span>
+        throw <span class="keyword">new</span> UnsupportedOperationException();
+    }
+}</div>
+
+<div class="danger">
+<strong>Problema:</strong>
+si Ave promete que sus objetos pueden volar, Pinguino no cumple esa
+expectativa. La jerarquía está expresando una relación incorrecta.
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>¿Dónde está el problema?</h3>
+
+<button class="choice" onclick="respuesta(this,false,'lsp1')">
+El problema es que Pinguino no tiene suficientes atributos.
+</button>
+
+<button class="choice" onclick="respuesta(this,true,'lsp1')">
+La abstracción Ave exige un comportamiento que Pinguino no puede cumplir.
+</button>
+
+<button class="choice" onclick="respuesta(this,false,'lsp1')">
+El problema es que usamos demasiados métodos.
+</button>
+
+<div id="lsp1" class="result"></div>
+
+</div>
+
+<div class="card">
+
+<h3>Una posible corrección</h3>
+
+<p>
+En lugar de obligar a todas las aves a volar, podemos diseñar una abstracción
+más adecuada.
+</p>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Ave</span> {
+    <span class="comment">// características comunes</span>
+}
+
+<span class="keyword">interface</span> <span class="type">Volador</span> {
+
+    <span class="keyword">void</span> <span class="method">volar</span>();
+}
+
+<span class="keyword">class</span> <span class="type">Aguila</span>
+        <span class="keyword">extends</span> <span class="type">Ave</span>
+        <span class="keyword">implements</span> <span class="type">Volador</span> {
+
+    <span class="keyword">public void</span> <span class="method">volar</span>() {
+        System.out.println(<span class="comment">"El águila vuela"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Pinguino</span>
+        <span class="keyword">extends</span> <span class="type">Ave</span> {
+
+    <span class="comment">// No está obligado a implementar volar()</span>
+}</div>
+
+<div class="important">
+<strong>Idea:</strong> no debemos forzar a una subclase a cumplir
+comportamientos que contradicen lo que realmente representa.
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- POLIMORFISMO -->
+
+<section id="polimorfismo">
+<div class="container">
+
+<h2 class="section-title">8. Primer acercamiento al polimorfismo</h2>
+
+<p class="section-subtitle">
+La misma operación puede comportarse de manera diferente según el objeto.
+</p>
+
+<div class="card">
+
+<h3>Sobreescritura de métodos</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+        System.out.println(<span class="comment">"Trabajo de empleado"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+        System.out.println(<span class="comment">"El gerente coordina"</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Operario</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">void</span> <span class="method">trabajar</span>() {
+        System.out.println(<span class="comment">"El operario produce"</span>);
+    }
+}</div>
+
+</div>
+
+<div class="card">
+
+<h3>¿Qué sucede aquí?</h3>
+
+<div class="code"><span class="type">Empleado</span> e1 = <span class="keyword">new</span> <span class="type">Gerente</span>();
+<span class="type">Empleado</span> e2 = <span class="keyword">new</span> <span class="type">Operario</span>();
+
+e1.trabajar();
+e2.trabajar();</div>
+
+<div class="grid">
+
+<div class="important">
+<strong>e1.trabajar()</strong><br>
+Ejecuta la versión de Gerente.
+</div>
+
+<div class="important">
+<strong>e2.trabajar()</strong><br>
+Ejecuta la versión de Operario.
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>¿Y si calculamos el salario?</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">double</span> <span class="method">calcularSalario</span>() {
+        <span class="keyword">return</span> 1500000;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">double</span> <span class="method">calcularSalario</span>() {
+        <span class="keyword">return</span> 3500000;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Operario</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">double</span> <span class="method">calcularSalario</span>() {
+        <span class="keyword">return</span> 2200000;
+    }
+}</div>
+
+<p>
+La operación se llama igual, pero cada objeto proporciona su propia
+implementación.
+</p>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- ABSTRACTA -->
+
+<section id="abstracta">
+<div class="container">
+
+<h2 class="section-title">9. Clases y métodos abstractos</h2>
+
+<div class="card">
+
+<p>
+Una clase abstracta permite definir una base común sin necesariamente
+proporcionar una implementación completa para todos sus comportamientos.
+</p>
+
+<div class="code"><span class="keyword">abstract class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">protected</span> String nombre;
+
+    <span class="type">Empleado</span>(String nombre) {
+        <span class="keyword">this</span>.nombre = nombre;
+    }
+
+    <span class="keyword">abstract double</span> <span class="method">calcularSalario</span>();
+
+    <span class="keyword">void</span> <span class="method">mostrarNombre</span>() {
+        System.out.println(nombre);
+    }
+}</div>
+
+<div class="highlight">
+<strong>Importante:</strong><br>
+No podemos hacer directamente:
+<br><br>
+<code>Empleado e = new Empleado("Ana");</code>
+<br><br>
+porque Empleado es abstracta.
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Las subclases completan el comportamiento</h3>
+
+<div class="code"><span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="type">Gerente</span>(String nombre) {
+        <span class="keyword">super</span>(nombre);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">double</span> <span class="method">calcularSalario</span>() {
+        <span class="keyword">return</span> 3500000;
+    }
+}</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- RETO -->
+
+<section id="reto">
+<div class="container">
+
+<h2 class="section-title">10. Reto de diseño</h2>
+
+<p class="section-subtitle">
+Ahora analiza antes de escribir código.
+</p>
+
+<div class="card">
+
+<div class="big-question">
+Una empresa tiene:
+</div>
+
+<ul class="checklist">
+<li>Empleados.</li>
+<li>Gerentes.</li>
+<li>Operarios.</li>
+<li>Todos tienen nombre e identificación.</li>
+<li>Todos deben poder calcular su salario.</li>
+<li>El salario de un gerente incluye un bono.</li>
+<li>El salario de un operario depende de sus horas trabajadas.</li>
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>Preguntas para diseñar la solución</h3>
+
+<div id="q1" class="card" style="background:#f8fafc;">
+<strong>1.</strong> ¿Cuál debería ser la superclase?
+<br><br>
+<button class="btn" onclick="mostrar('a1')">Mostrar respuesta</button>
+<div id="a1" class="reveal">
+<strong>Empleado.</strong> Es la abstracción general que contiene
+las características comunes.
+</div>
+</div>
+
+<div id="q2" class="card" style="background:#f8fafc;">
+<strong>2.</strong> ¿Cuáles serían las subclases?
+<br><br>
+<button class="btn" onclick="mostrar('a2')">Mostrar respuesta</button>
+<div id="a2" class="reveal">
+<strong>Gerente y Operario.</strong>
+Son especializaciones de Empleado.
+</div>
+</div>
+
+<div id="q3" class="card" style="background:#f8fafc;">
+<strong>3.</strong> ¿Dónde debería estar calcularSalario()?
+<br><br>
+<button class="btn" onclick="mostrar('a3')">Mostrar respuesta</button>
+<div id="a3" class="reveal">
+En la clase abstracta <strong>Empleado</strong> como método abstracto,
+para que cada subclase implemente su propia forma de calcularlo.
+</div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Solución conceptual</h3>
+
+<div class="uml">
+<div class="uml-title">&lt;&lt;abstract&gt;&gt; Empleado</div>
+<div class="uml-section">
+# nombre : String<br>
+# identificacion : String<br><br>
++ calcularSalario() : double
+</div>
+</div>
+
+<div class="arrow">△</div>
+
+<div class="grid">
+
+<div class="uml">
+<div class="uml-title">Gerente</div>
+<div class="uml-section">
+- bono : double<br><br>
++ calcularSalario() : double
+</div>
+</div>
+
+<div class="uml">
+<div class="uml-title">Operario</div>
+<div class="uml-section">
+- horas : int<br><br>
++ calcularSalario() : double
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Implementación final</h3>
+
+<div class="code"><span class="keyword">abstract class</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">protected</span> String nombre;
+    <span class="keyword">protected</span> String identificacion;
+
+    <span class="type">Empleado</span>(String nombre, String identificacion) {
+        <span class="keyword">this</span>.nombre = nombre;
+        <span class="keyword">this</span>.identificacion = identificacion;
+    }
+
+    <span class="keyword">abstract double</span> <span class="method">calcularSalario</span>();
+}
+
+
+<span class="keyword">class</span> <span class="type">Gerente</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">private</span> <span class="keyword">double</span> bono;
+
+    <span class="type">Gerente</span>(
+        String nombre,
+        String identificacion,
+        <span class="keyword">double</span> bono
+    ) {
+
+        <span class="keyword">super</span>(nombre, identificacion);
+        <span class="keyword">this</span>.bono = bono;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">double</span> <span class="method">calcularSalario</span>() {
+
+        <span class="keyword">return</span> 3500000 + bono;
+    }
+}
+
+
+<span class="keyword">class</span> <span class="type">Operario</span> <span class="keyword">extends</span> <span class="type">Empleado</span> {
+
+    <span class="keyword">private</span> <span class="keyword">int</span> horas;
+
+    <span class="type">Operario</span>(
+        String nombre,
+        String identificacion,
+        <span class="keyword">int</span> horas
+    ) {
+
+        <span class="keyword">super</span>(nombre, identificacion);
+        <span class="keyword">this</span>.horas = horas;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">double</span> <span class="method">calcularSalario</span>() {
+
+        <span class="keyword">return</span> horas * 12000;
+    }
+}</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- REPASO INTERACTIVO -->
+
+<section id="repaso">
+<div class="container">
+
+<h2 class="section-title">11. Comprueba lo que entendiste</h2>
+
+<div class="card">
+
+<div class="big-question">
+¿Qué palabra utiliza Java para indicar herencia entre clases?
+</div>
+
+<button class="choice" onclick="quiz(this,true,'qz1')">
+extends
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz1')">
+inherits
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz1')">
+superclass
+</button>
+
+<div id="qz1" class="result"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="big-question">
+¿Qué palabra permite llamar al constructor de la superclase?
+</div>
+
+<button class="choice" onclick="quiz(this,true,'qz2')">
+super
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz2')">
+parent
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz2')">
+extends
+</button>
+
+<div id="qz2" class="result"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="big-question">
+¿Qué sucede cuando una subclase redefine un método heredado?
+</div>
+
+<button class="choice" onclick="quiz(this,true,'qz3')">
+Se produce una sobreescritura del método.
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz3')">
+Se elimina automáticamente la superclase.
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz3')">
+Se convierte en una clase abstracta.
+</button>
+
+<div id="qz3" class="result"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="big-question">
+¿Cuál es la idea fundamental del LSP?
+</div>
+
+<button class="choice" onclick="quiz(this,true,'qz4')">
+Una subclase debe poder sustituir a su superclase sin romper las expectativas del programa.
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz4')">
+Todas las subclases deben tener exactamente los mismos atributos.
+</button>
+
+<button class="choice" onclick="quiz(this,false,'qz4')">
+Toda clase debe tener al menos una subclase.
+</button>
+
+<div id="qz4" class="result"></div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- CIERRE -->
+
+<section id="cierre">
+<div class="container">
+
+<h2 class="section-title">Para llevarse hoy</h2>
+
+<div class="grid">
+
+<div class="flip-container" onclick="this.classList.toggle('flipped')">
+<div class="flip-card">
+
+<div class="flip-front">
+<h3>HERENCIA</h3>
+<p>Una clase especializada hereda características de una clase general.</p>
+<br>
+<span class="small">Haz clic para voltear</span>
+</div>
+
+<div class="flip-back">
+<h3>Clave</h3>
+<p>Empleado → Gerente</p>
+<p>Gerente ES UN Empleado.</p>
+</div>
+
+</div>
+</div>
+
+
+<div class="flip-container" onclick="this.classList.toggle('flipped')">
+<div class="flip-card">
+
+<div class="flip-front">
+<h3>LSP</h3>
+<p>La especialización debe respetar las expectativas de la abstracción.</p>
+<br>
+<span class="small">Haz clic para voltear</span>
+</div>
+
+<div class="flip-back">
+<h3>Clave</h3>
+<p>Una subclase no debería romper el comportamiento esperado de la superclase.</p>
+</div>
+
+</div>
+</div>
+
+
+<div class="flip-container" onclick="this.classList.toggle('flipped')">
+<div class="flip-card">
+
+<div class="flip-front">
+<h3>POLIMORFISMO</h3>
+<p>Una misma operación puede tener diferentes comportamientos.</p>
+<br>
+<span class="small">Haz clic para voltear</span>
+</div>
+
+<div class="flip-back">
+<h3>Clave</h3>
+<p>Empleado e = new Gerente();</p>
+<p>e.calcularSalario();</p>
+</div>
+
+</div>
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:30px;">
+
+<h3>Mapa mental de la clase</h3>
+
+<div style="font-size:1.1rem;text-align:center;padding:20px;">
+
+<strong>DISEÑO ORIENTADO A OBJETOS</strong>
+
+<div style="font-size:35px;">↓</div>
+
+<strong>HERENCIA</strong>
+
+<div style="font-size:30px;">↓</div>
+
+<div class="grid">
+
+<div>
+<strong>Superclase</strong>
+<br>
+Empleado
+</div>
+
+<div>
+<strong>Subclases</strong>
+<br>
+Gerente / Operario
+</div>
+
+</div>
+
+<div style="font-size:30px;">↓</div>
+
+<strong>extends + super + protected</strong>
+
+<div style="font-size:30px;">↓</div>
+
+<strong>REUTILIZACIÓN + ESPECIALIZACIÓN</strong>
+
+<div style="font-size:30px;">↓</div>
+
+<strong>LSP</strong>
+
+<div style="font-size:30px;">↓</div>
+
+<strong>POLIMORFISMO</strong>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+</main>
+
+
+<footer>
+<strong>Diseño y Programación Orientada a Objetos</strong>
+<br>
+Herencia · UML · LSP · Polimorfismo
+</footer>
+
+
+<script>
+
+function irA(id){
+    document.getElementById(id).scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+function mostrar(id){
+    const elemento=document.getElementById(id);
+
+    if(elemento.classList.contains("show")){
+        elemento.classList.remove("show");
+    }else{
+        elemento.classList.add("show");
+    }
+}
+
+function tab(event,id){
+
+    document.querySelectorAll(".tab-content")
+        .forEach(el=>el.classList.remove("active"));
+
+    document.querySelectorAll(".tab-btn")
+        .forEach(el=>el.classList.remove("active"));
+
+    document.getElementById(id).classList.add("active");
+
+    event.currentTarget.classList.add("active");
+}
+
+function respuesta(elemento,correcto,id){
+
+    const resultado=document.getElementById(id);
+
+    document.querySelectorAll(
+        `[onclick*="respuesta"][onclick*="'${id}'"]`
+    ).forEach(btn=>{
+        btn.classList.remove("correct","incorrect");
+    });
+
+    if(correcto){
+
+        elemento.classList.add("correct");
+
+        resultado.innerHTML=
+        "✓ Correcto. La subclase puede ser tratada como una instancia de su superclase.";
+
+        resultado.style.color="#15803d";
+
+    }else{
+
+        elemento.classList.add("incorrect");
+
+        resultado.innerHTML=
+        "✗ Revisemos la idea: la herencia establece una relación de especialización.";
+
+        resultado.style.color="#b91c1c";
+    }
+}
+
+function quiz(elemento,correcto,id){
+
+    const resultado=document.getElementById(id);
+
+    const parent=elemento.parentElement;
+
+    parent.querySelectorAll(".choice")
+        .forEach(btn=>{
+            btn.classList.remove("correct","incorrect");
+        });
+
+    if(correcto){
+
+        elemento.classList.add("correct");
+
+        resultado.innerHTML="✓ ¡Correcto!";
+
+        resultado.style.color="#15803d";
+
+    }else{
+
+        elemento.classList.add("incorrect");
+
+        resultado.innerHTML="✗ Esa no es. Revisa nuevamente el concepto.";
+
+        resultado.style.color="#b91c1c";
+    }
+}
+
+
+/* Barra de navegación activa */
+
+const sections=document.querySelectorAll("section, header");
+const navButtons=document.querySelectorAll("nav button");
+
+window.addEventListener("scroll",()=>{
+
+    let actual="inicio";
+
+    sections.forEach(section=>{
+
+        const top=section.offsetTop-160;
+
+        if(window.scrollY>=top){
+            actual=section.id;
+        }
+
+    });
+
+    navButtons.forEach(btn=>{
+        btn.classList.remove("active");
+
+        if(btn.getAttribute("onclick") &&
+           btn.getAttribute("onclick").includes(actual)){
+            btn.classList.add("active");
+        }
+    });
+
+});
+
+</script>
+
+</body>
+</html>
