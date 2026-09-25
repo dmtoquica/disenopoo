@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diseño y Programación OO — Relaciones y Herencia</title>
+<style>
+:root{
+ --bg:#f4f6f8;--card:#fff;--ink:#17202a;--muted:#667085;--line:#d7dde5;
+ --nav:#182b3a;--blue:#2563eb;--bluebg:#eff6ff;--green:#157347;--greenbg:#eaf7ef;
+ --orange:#9a6700;--orangebg:#fff7dc;--red:#b42318;--redbg:#fff0ee;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Arial,sans-serif;line-height:1.6}
+header{background:linear-gradient(135deg,#17202a,#334e68);color:white;padding:55px 7%}
+header h1{font-size:clamp(2rem,5vw,3.7rem);margin:6px 0 10px}
+header p{max-width:900px;color:#e7eef5;font-size:1.08rem}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;font-weight:700;color:#cbd5e1}
+nav{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 12px #00000010}
+.nav{max-width:1180px;margin:auto;padding:9px;display:flex;gap:7px;overflow:auto}
+nav button{border:0;background:#eef1f4;color:#344054;border-radius:18px;padding:9px 14px;white-space:nowrap;font-weight:650;cursor:pointer}
+nav button.active,nav button:hover{background:var(--nav);color:white}
+main{max-width:1180px;margin:auto;padding:20px}
+section{padding:38px 0}
+h2{font-size:2rem;margin:0 0 5px}h3{margin-top:0}
+.subtitle{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:21px;margin:16px 0}
+.relbtn{cursor:pointer;transition:.2s}.relbtn:hover{transform:translateY(-2px)}.relbtn.selected{outline:3px solid #93c5fd}
+.pill{display:inline-block;border-radius:999px;padding:4px 10px;background:#e8eef7;color:#304a66;font-size:.78rem;font-weight:700}
+.callout{background:var(--bluebg);border-left:5px solid var(--blue);padding:16px;border-radius:10px}
+.good{background:var(--greenbg);border-left:5px solid var(--green);padding:16px;border-radius:10px}
+.warn{background:var(--orangebg);border-left:5px solid #d4a72c;padding:16px;border-radius:10px}
+.bad{background:var(--redbg);border-left:5px solid var(--red);padding:16px;border-radius:10px}
+.diagram{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;overflow:auto}
+svg{display:block;width:100%;min-width:650px}
+.node{fill:#fff;stroke:#263746;stroke-width:2}.head{fill:#263746}.txt{font:16px "Segoe UI",Arial;fill:#17202a}.white{fill:white;font:700 16px "Segoe UI",Arial}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}.tabs button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 14px;font-weight:650;cursor:pointer}.tabs button.active{background:var(--nav);color:#fff}
+.tab{display:none}.tab.active{display:block}
+.code{background:#101820;color:#e7edf2;border-radius:13px;padding:17px;overflow:auto;font:14px/1.55 Consolas,monospace;white-space:pre}
+.kw{color:#ff79c6}.type{color:#8be9fd}.str{color:#f1fa8c}.com{color:#8a9aaa}.meth{color:#50fa7b}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:15px}
+.legend div{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:13px}
+.quiz{width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:13px;margin:7px 0;cursor:pointer}
+.quiz.correct{background:#dcfce7;border-color:#16a34a}.quiz.wrong{background:#fee2e2;border-color:#dc2626}
+.result{font-weight:700;margin-top:9px}
+.flipwrap{perspective:900px;cursor:pointer}.flip{position:relative;min-height:155px;transform-style:preserve-3d;transition:.55s}.flipwrap.flipped .flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px}.back{transform:rotateY(180deg);background:#182b3a;color:#fff}
+footer{background:#182b3a;color:#dce6ef;text-align:center;padding:30px}
+.small{font-size:.9rem;color:var(--muted)}
+@media(max-width:700px){main{padding:14px}header{padding:42px 6%}.card{padding:17px}}
+</style>
+</head>
+<body>
+
+<header id="inicio">
+ <div class="eyebrow">DISEÑO Y PROGRAMACIÓN ORIENTADA A OBJETOS</div>
+ <h1>Relaciones entre clases y herencia</h1>
+ <p>Una explicación visual de cómo se conectan las clases y cómo esas relaciones se representan en UML, antes de pasar a la herencia con Java.</p>
+</header>
+
+<nav><div class="nav">
+ <button class="active" data-go="inicio">Inicio</button>
+ <button data-go="relaciones">Relaciones UML</button>
+ <button data-go="comparar">Comparar</button>
+ <button data-go="herencia">Herencia</button>
+ <button data-go="java">Java</button>
+ <button data-go="lsp">LSP</button>
+ <button data-go="repaso">Repaso</button>
+</div></nav>
+
+<main>
+
+<section id="inicio">
+ <h2>1. ¿Cómo se relacionan dos clases?</h2>
+ <p class="subtitle">No todas las relaciones significan lo mismo. La diferencia está en el tipo de vínculo y en el grado de dependencia entre las clases.</p>
+ <div class="grid">
+  <div class="card relbtn" data-rel="asociacion"><span class="pill">01 · Asociación</span><h3>Una clase se relaciona con otra</h3><p>Las dos pueden existir independientemente.</p></div>
+  <div class="card relbtn" data-rel="dependencia"><span class="pill">02 · Dependencia</span><h3>Una clase usa a otra</h3><p>El uso normalmente es temporal, por ejemplo mediante un parámetro.</p></div>
+  <div class="card relbtn" data-rel="agregacion"><span class="pill">03 · Agregación</span><h3>Un todo agrupa partes</h3><p>Las partes pueden continuar existiendo sin el todo.</p></div>
+  <div class="card relbtn" data-rel="composicion"><span class="pill">04 · Composición</span><h3>Un todo está formado por partes</h3><p>Las partes dependen de la existencia del todo.</p></div>
+ </div>
+ <div id="introInfo" class="callout"><strong>Selecciona una relación.</strong> La gráfica y la explicación aparecerán aquí.</div>
+</section>
+
+<section id="relaciones">
+ <h2>2. Las relaciones en UML</h2>
+ <p class="subtitle">Aquí aparece la diferencia que suele confundirse: <strong>cada relación tiene una representación gráfica distinta</strong>.</p>
+
+ <div class="tabs" id="relTabs">
+  <button class="active" data-rel-tab="asociacion">Asociación</button>
+  <button data-rel-tab="dependencia">Dependencia</button>
+  <button data-rel-tab="agregacion">Agregación</button>
+  <button data-rel-tab="composicion">Composición</button>
+ </div>
+
+ <div id="rel-asociacion" class="relpanel">
+  <div class="card">
+   <h3>Asociación: línea continua</h3>
+   <div class="diagram">
+    <svg viewBox="0 0 900 310" role="img" aria-label="UML asociación entre Profesor y Curso">
+     <defs><marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#64748b"/></marker></defs>
+     <rect x="70" y="105" width="240" height="105" rx="10" class="node"/><rect x="70" y="105" width="240" height="37" rx="10" class="head"/>
+     <text x="190" y="130" text-anchor="middle" class="white">Profesor</text><text x="90" y="170" class="txt">nombre : String</text><text x="90" y="195" class="txt">+ enseñar()</text>
+     <line x1="310" y1="157" x2="590" y2="157" stroke="#263746" stroke-width="3"/>
+     <text x="450" y="140" text-anchor="middle" class="txt">dicta</text>
+     <rect x="590" y="105" width="240" height="105" rx="10" class="node"/><rect x="590" y="105" width="240" height="37" rx="10" class="head"/>
+     <text x="710" y="130" text-anchor="middle" class="white">Curso</text><text x="610" y="170" class="txt">nombre : String</text><text x="610" y="195" class="txt">+ iniciar()</text>
+    </svg>
+   </div>
+   <div class="legend">
+    <div><strong>Forma:</strong> línea continua.</div>
+    <div><strong>Significado:</strong> las clases se conocen o se relacionan.</div>
+    <div><strong>Existencia:</strong> ambas pueden existir independientemente.</div>
+   </div>
+   <div class="good"><strong>Ejemplo:</strong> Profesor — Curso. Un profesor puede existir aunque en ese momento no tenga un curso asignado; un curso también puede existir sin profesor asignado.</div>
+  </div>
+ </div>
+
+ <div id="rel-dependencia" class="relpanel" style="display:none">
+  <div class="card">
+   <h3>Dependencia: línea discontinua con flecha abierta</h3>
+   <div class="diagram">
+    <svg viewBox="0 0 900 310" role="img" aria-label="UML dependencia entre Impresora y Documento">
+     <defs><marker id="a2" markerWidth="11" markerHeight="11" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6" fill="none" stroke="#263746" stroke-width="1.5"/></marker></defs>
+     <rect x="70" y="105" width="250" height="105" rx="10" class="node"/><rect x="70" y="105" width="250" height="37" rx="10" class="head"/>
+     <text x="195" y="130" text-anchor="middle" class="white">Impresora</text><text x="90" y="170" class="txt">+ imprimir(doc)</text><text x="90" y="195" class="txt">+ conectar()</text>
+     <line x1="320" y1="157" x2="580" y2="157" stroke="#263746" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#a2)"/>
+     <text x="450" y="140" text-anchor="middle" class="txt">usa</text>
+     <rect x="580" y="105" width="250" height="105" rx="10" class="node"/><rect x="580" y="105" width="250" height="37" rx="10" class="head"/>
+     <text x="705" y="130" text-anchor="middle" class="white">Documento</text><text x="600" y="170" class="txt">contenido : String</text><text x="600" y="195" class="txt">+ guardar()</text>
+    </svg>
+   </div>
+   <div class="legend">
+    <div><strong>Forma:</strong> línea discontinua.</div>
+    <div><strong>Flecha:</strong> abierta y apunta hacia la clase de la que se depende.</div>
+    <div><strong>Uso:</strong> una clase necesita a otra para realizar una operación.</div>
+   </div>
+   <div class="good"><strong>Ejemplo:</strong> <code>imprimir(Documento doc)</code>. La impresora usa el documento durante la operación; no necesariamente lo guarda como atributo.</div>
+  </div>
+ </div>
+
+ <div id="rel-agregacion" class="relpanel" style="display:none">
+  <div class="card">
+   <h3>Agregación: línea continua + rombo vacío</h3>
+   <div class="diagram">
+    <svg viewBox="0 0 900 310" role="img" aria-label="UML agregación entre Equipo y Jugador">
+     <rect x="70" y="105" width="250" height="105" rx="10" class="node"/><rect x="70" y="105" width="250" height="37" rx="10" class="head"/>
+     <text x="195" y="130" text-anchor="middle" class="white">Equipo</text><text x="90" y="170" class="txt">nombre : String</text><text x="90" y="195" class="txt">+ agregarJugador()</text>
+     <line x1="320" y1="157" x2="580" y2="157" stroke="#263746" stroke-width="3"/>
+     <polygon points="320,157 342,144 364,157 342,170" fill="white" stroke="#263746" stroke-width="3"/>
+     <text x="450" y="140" text-anchor="middle" class="txt">agrupa</text>
+     <rect x="580" y="105" width="250" height="105" rx="10" class="node"/><rect x="580" y="105" width="250" height="37" rx="10" class="head"/>
+     <text x="705" y="130" text-anchor="middle" class="white">Jugador</text><text x="600" y="170" class="txt">nombre : String</text><text x="600" y="195" class="txt">+ jugar()</text>
+    </svg>
+   </div>
+   <div class="legend">
+    <div><strong>Forma:</strong> línea continua + <strong>rombo vacío</strong>.</div>
+    <div><strong>Rombo:</strong> se coloca junto al “todo”, aquí Equipo.</div>
+    <div><strong>Existencia:</strong> el Jugador puede vivir fuera del Equipo.</div>
+   </div>
+   <div class="good"><strong>Ejemplo:</strong> Equipo — Jugador. Si el equipo desaparece, los jugadores siguen existiendo y pueden pasar a otro equipo.</div>
+  </div>
+ </div>
+
+ <div id="rel-composicion" class="relpanel" style="display:none">
+  <div class="card">
+   <h3>Composición: línea continua + rombo lleno</h3>
+   <div class="diagram">
+    <svg viewBox="0 0 900 310" role="img" aria-label="UML composición entre Casa y Habitacion">
+     <rect x="70" y="105" width="250" height="105" rx="10" class="node"/><rect x="70" y="105" width="250" height="37" rx="10" class="head"/>
+     <text x="195" y="130" text-anchor="middle" class="white">Casa</text><text x="90" y="170" class="txt">direccion : String</text><text x="90" y="195" class="txt">+ construir()</text>
+     <line x1="320" y1="157" x2="580" y2="157" stroke="#263746" stroke-width="3"/>
+     <polygon points="320,157 342,144 364,157 342,170" fill="#263746" stroke="#263746" stroke-width="3"/>
+     <text x="450" y="140" text-anchor="middle" class="txt">compone</text>
+     <rect x="580" y="105" width="250" height="105" rx="10" class="node"/><rect x="580" y="105" width="250" height="37" rx="10" class="head"/>
+     <text x="705" y="130" text-anchor="middle" class="white">Habitación</text><text x="600" y="170" class="txt">numero : int</text><text x="600" y="195" class="txt">+ ocupar()</text>
+    </svg>
+   </div>
+   <div class="legend">
+    <div><strong>Forma:</strong> línea continua + <strong>rombo lleno</strong>.</div>
+    <div><strong>Rombo:</strong> se coloca junto al “todo”, aquí Casa.</div>
+    <div><strong>Existencia:</strong> la parte depende conceptualmente del todo.</div>
+   </div>
+   <div class="good"><strong>Ejemplo del material:</strong> Casa — Habitaciones. Las habitaciones se entienden como partes de la Casa y dependen de esa composición.</div>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>La diferencia visual en una sola imagen</h3>
+  <div class="diagram">
+   <svg viewBox="0 0 900 360" role="img" aria-label="Comparación de símbolos UML">
+    <text x="450" y="35" text-anchor="middle" class="txt" font-weight="700">SÍMBOLOS UML</text>
+    <line x1="55" y1="100" x2="245" y2="100" stroke="#263746" stroke-width="3"/>
+    <text x="150" y="140" text-anchor="middle" class="txt">Asociación</text>
+    <line x1="275" y1="100" x2="465" y2="100" stroke="#263746" stroke-width="3" stroke-dasharray="10 8"/>
+    <text x="370" y="140" text-anchor="middle" class="txt">Dependencia</text>
+    <line x1="495" y1="100" x2="685" y2="100" stroke="#263746" stroke-width="3"/>
+    <polygon points="495,100 517,87 539,100 517,113" fill="white" stroke="#263746" stroke-width="3"/>
+    <text x="590" y="140" text-anchor="middle" class="txt">Agregación</text>
+    <line x1="715" y1="100" x2="895" y2="100" stroke="#263746" stroke-width="3"/>
+    <polygon points="715,100 737,87 759,100 737,113" fill="#263746"/>
+    <text x="805" y="140" text-anchor="middle" class="txt">Composición</text>
+    <text x="450" y="205" text-anchor="middle" class="txt">La línea indica el vínculo; el trazo y el extremo de la relación aportan el significado.</text>
+    <text x="450" y="245" text-anchor="middle" class="txt" font-weight="700">Continua → relación estructural</text>
+    <text x="450" y="275" text-anchor="middle" class="txt">Discontinua + flecha abierta → dependencia</text>
+    <text x="450" y="305" text-anchor="middle" class="txt">Rombo vacío → agregación · Rombo lleno → composición</text>
+   </svg>
+  </div>
+ </div>
+</section>
+
+<section id="comparar">
+ <h2>3. ¿Cómo no confundirlas?</h2>
+ <table>
+  <tr><th>Relación</th><th>Representación UML</th><th>Pregunta</th><th>Ejemplo</th></tr>
+  <tr><td>Asociación</td><td>Línea continua</td><td>¿Se relacionan y pueden existir independientemente?</td><td>Profesor — Curso</td></tr>
+  <tr><td>Dependencia</td><td>Línea discontinua + flecha abierta</td><td>¿Una clase usa a la otra temporalmente?</td><td>Impresora → Documento</td></tr>
+  <tr><td>Agregación</td><td>Línea continua + rombo vacío</td><td>¿El todo agrupa partes que pueden sobrevivir?</td><td>Equipo ◇— Jugador</td></tr>
+  <tr><td>Composición</td><td>Línea continua + rombo lleno</td><td>¿Las partes dependen del todo?</td><td>Casa ◆— Habitación</td></tr>
+ </table>
+ <div class="card callout"><strong>Clave:</strong> no memorices solamente el dibujo. Primero identifica el significado de la relación y después selecciona su símbolo UML.</div>
+</section>
+
+<section id="herencia">
+ <h2>4. Herencia: otra clase de relación</h2>
+ <p class="subtitle">Aquí ya no hablamos de “tiene un”, sino de “es un”.</p>
+ <div class="diagram">
+  <svg viewBox="0 0 900 420" role="img" aria-label="Herencia Vehiculo hacia Carro y Moto">
+   <rect x="325" y="35" width="250" height="110" rx="10" class="node"/><rect x="325" y="35" width="250" height="37" class="head"/>
+   <text x="450" y="60" text-anchor="middle" class="white">Vehículo</text><text x="345" y="99" class="txt">marca : String</text><text x="345" y="124" class="txt">modelo : String</text>
+   <line x1="450" y1="235" x2="450" y2="145" stroke="#263746" stroke-width="3"/>
+   <polygon points="450,145 437,166 463,166" fill="white" stroke="#263746" stroke-width="3"/>
+   <rect x="100" y="265" width="250" height="105" rx="10" class="node"/><rect x="100" y="265" width="250" height="37" class="head"/>
+   <text x="225" y="290" text-anchor="middle" class="white">Carro</text><text x="120" y="328" class="txt">numeroPuertas : int</text><text x="120" y="354" class="txt">+ mover()</text>
+   <rect x="550" y="265" width="250" height="105" rx="10" class="node"/><rect x="550" y="265" width="250" height="37" class="head"/>
+   <text x="675" y="290" text-anchor="middle" class="white">Moto</text><text x="570" y="328" class="txt">cilindraje : int</text><text x="570" y="354" class="txt">+ mover()</text>
+   <line x1="450" y1="235" x2="225" y2="265" stroke="#263746" stroke-width="3"/>
+   <line x1="450" y1="235" x2="675" y2="265" stroke="#263746" stroke-width="3"/>
+   <text x="450" y="405" text-anchor="middle" class="txt" font-weight="700">La flecha triangular hueca apunta hacia la superclase.</text>
+  </svg>
+ </div>
+ <div class="grid">
+  <div class="card good"><strong>Generalización:</strong> Carro + Moto → Vehículo. Buscamos lo que comparten.</div>
+  <div class="card good"><strong>Especialización:</strong> Vehículo → Carro / Moto. Agregamos lo específico.</div>
+ </div>
+</section>
+
+<section id="java">
+ <h2>5. La misma idea en Java</h2>
+ <div class="tabs">
+  <button class="active" data-code="c1">extends</button>
+  <button data-code="c2">super</button>
+  <button data-code="c3">protected</button>
+  <button data-code="c4">Ejemplo Empleado</button>
+ </div>
+ <div id="c1" class="tab active card"><div class="code"><span class="kw">class</span> <span class="type">Gerente</span> <span class="kw">extends</span> <span class="type">Empleado</span> {
+}</div><p><code>extends</code> indica que Gerente hereda de Empleado.</p></div>
+ <div id="c2" class="tab card"><div class="code"><span class="kw">public</span> <span class="type">Gerente</span>(String nombre, <span class="kw">double</span> salario, <span class="kw">double</span> bono) {
+    <span class="kw">super</span>(nombre, salario);
+    <span class="kw">this</span>.bono = bono;
+}</div><p><code>super(...)</code> llama al constructor de la superclase.</p></div>
+ <div id="c3" class="tab card"><div class="code"><span class="kw">class</span> <span class="type">Empleado</span> {
+    <span class="kw">protected</span> String nombre;
+    <span class="kw">protected</span> <span class="kw">double</span> salarioBase;
+}</div><p>En esta jerarquía, <code>protected</code> permite que las subclases accedan directamente a esos miembros.</p></div>
+ <div id="c4" class="tab card"><div class="code"><span class="kw">class</span> <span class="type">Empleado</span> {
+    <span class="kw">protected</span> String nombre;
+    <span class="kw">protected</span> <span class="kw">double</span> salarioBase;
+
+    <span class="kw">public</span> <span class="type">Empleado</span>(String nombre, <span class="kw">double</span> salarioBase) {
+        <span class="kw">this</span>.nombre = nombre;
+        <span class="kw">this</span>.salarioBase = salarioBase;
+    }
+
+    <span class="kw">public double</span> <span class="meth">calcularSalario</span>() {
+        <span class="kw">return</span> salarioBase;
+    }
+}
+
+<span class="kw">class</span> <span class="type">Gerente</span> <span class="kw">extends</span> <span class="type">Empleado</span> {
+    <span class="kw">private double</span> bono;
+
+    <span class="type">Gerente</span>(String nombre, <span class="kw">double</span> salario, <span class="kw">double</span> bono) {
+        <span class="kw">super</span>(nombre, salario);
+        <span class="kw">this</span>.bono = bono;
+    }
+
+    <span class="kw">double</span> <span class="meth">calcularSalarioTotal</span>() {
+        <span class="kw">return</span> calcularSalario() + bono;
+    }
+}
+
+<span class="kw">class</span> <span class="type">Operario</span> <span class="kw">extends</span> <span class="type">Empleado</span> {
+    <span class="kw">private int</span> horasExtra;
+
+    <span class="type">Operario</span>(String nombre, <span class="kw">double</span> salario, <span class="kw">int</span> horasExtra) {
+        <span class="kw">super</span>(nombre, salario);
+        <span class="kw">this</span>.horasExtra = horasExtra;
+    }
+
+    <span class="kw">double</span> <span class="meth">calcularSalarioTotal</span>() {
+        <span class="kw">return</span> calcularSalario() + horasExtra * 15000;
+    }
+}</div></div>
+</section>
+
+<section id="lsp">
+ <h2>6. Principio de Sustitución de Liskov</h2>
+ <p class="subtitle">La pregunta central es si una subclase puede ocupar el lugar de la superclase sin romper lo que el programa espera.</p>
+ <div class="card">
+  <div class="diagram">
+   <svg viewBox="0 0 900 300" role="img" aria-label="Rectangulo y Cuadrado para explicar LSP">
+    <rect x="70" y="80" width="260" height="125" rx="10" class="node"/><rect x="70" y="80" width="260" height="37" class="head"/>
+    <text x="200" y="105" text-anchor="middle" class="white">Rectángulo</text><text x="90" y="150" class="txt">setAncho(w)</text><text x="90" y="180" class="txt">setAlto(h)</text>
+    <line x1="330" y1="142" x2="500" y2="142" stroke="#263746" stroke-width="3"/>
+    <polygon points="500,142 486,121 514,121" fill="white" stroke="#263746" stroke-width="3"/>
+    <rect x="500" y="80" width="260" height="125" rx="10" class="node"/><rect x="500" y="80" width="260" height="37" class="head"/>
+    <text x="630" y="105" text-anchor="middle" class="white">Cuadrado</text><text x="520" y="150" class="txt">ancho = alto</text><text x="520" y="180" class="txt">redefine setters</text>
+    <text x="450" y="250" text-anchor="middle" class="txt">La relación “es un” no garantiza por sí sola que la sustitución sea segura.</text>
+   </svg>
+  </div>
+  <div class="bad"><strong>Problema:</strong> si un código espera poder cambiar ancho y alto de forma independiente, un Cuadrado que obliga a mantenerlos iguales puede romper esa expectativa.</div>
+ </div>
+ <div class="card">
+  <h3>Aplicado a Empleado</h3>
+  <div class="grid">
+   <div class="good"><strong>Gerente:</strong> conserva el comportamiento esperado de Empleado y agrega bono.</div>
+   <div class="good"><strong>Operario:</strong> conserva el comportamiento esperado y agrega horas extra.</div>
+   <div class="good"><strong>Practicante:</strong> conserva el comportamiento heredado y agrega su particularidad.</div>
+  </div>
+ </div>
+</section>
+
+<section id="repaso">
+ <h2>7. Repaso interactivo</h2>
+ <div class="card">
+  <h3>¿Qué símbolo identifica una agregación?</h3>
+  <button class="quiz" data-q="1">Rombo lleno</button>
+  <button class="quiz" data-q="1" data-correct="1">Rombo vacío</button>
+  <button class="quiz" data-q="1">Línea discontinua con flecha</button>
+  <div class="result" id="r1"></div>
+ </div>
+ <div class="card">
+  <h3>¿Qué símbolo identifica una composición?</h3>
+  <button class="quiz" data-q="2">Rombo vacío</button>
+  <button class="quiz" data-q="2" data-correct="1">Rombo lleno</button>
+  <button class="quiz" data-q="2">Línea continua sin extremo especial</button>
+  <div class="result" id="r2"></div>
+ </div>
+ <div class="card">
+  <h3>¿Qué palabra representa la herencia en Java?</h3>
+  <button class="quiz" data-q="3" data-correct="1">extends</button>
+  <button class="quiz" data-q="3">implements</button>
+  <button class="quiz" data-q="3">inherits</button>
+  <div class="result" id="r3"></div>
+ </div>
+ <div class="card">
+  <h3>¿Qué representa el rombo en agregación y composición?</h3>
+  <button class="quiz" data-q="4">La clase que es una parte.</button>
+  <button class="quiz" data-q="4" data-correct="1">El extremo del “todo” que contiene las partes.</button>
+  <button class="quiz" data-q="4">Siempre representa una subclase.</button>
+  <div class="result" id="r4"></div>
+ </div>
+
+ <div class="grid">
+  <div class="flipwrap"><div class="flip"><div class="face"><h3>Asociación</h3><p>Línea continua.</p></div><div class="face back"><h3>Idea</h3><p>Las clases se relacionan y pueden existir independientemente.</p></div></div></div>
+  <div class="flipwrap"><div class="flip"><div class="face"><h3>Dependencia</h3><p>Línea discontinua + flecha abierta.</p></div><div class="face back"><h3>Idea</h3><p>Una clase usa a otra temporalmente.</p></div></div></div>
+  <div class="flipwrap"><div class="flip"><div class="face"><h3>Agregación</h3><p>Rombo vacío.</p></div><div class="face back"><h3>Idea</h3><p>Las partes pueden sobrevivir al todo.</p></div></div></div>
+  <div class="flipwrap"><div class="flip"><div class="face"><h3>Composición</h3><p>Rombo lleno.</p></div><div class="face back"><h3>Idea</h3><p>Las partes dependen del todo.</p></div></div></div>
+ </div>
+</section>
+
+<section>
+ <h2>Mapa conceptual</h2>
+ <div class="diagram">
+  <svg viewBox="0 0 900 280" role="img" aria-label="Mapa conceptual de relaciones y herencia">
+   <rect x="330" y="20" width="240" height="55" rx="10" class="head"/><text x="450" y="55" text-anchor="middle" class="white">DISEÑO OO</text>
+   <line x1="450" y1="75" x2="450" y2="105" stroke="#263746" stroke-width="3"/>
+   <rect x="40" y="115" width="190" height="60" rx="10" class="node"/><text x="135" y="151" text-anchor="middle" class="txt">Relaciones</text>
+   <rect x="260" y="115" width="190" height="60" rx="10" class="node"/><text x="355" y="151" text-anchor="middle" class="txt">Herencia</text>
+   <rect x="480" y="115" width="190" height="60" rx="10" class="node"/><text x="575" y="151" text-anchor="middle" class="txt">UML</text>
+   <rect x="700" y="115" width="160" height="60" rx="10" class="node"/><text x="780" y="151" text-anchor="middle" class="txt">LSP</text>
+   <line x1="450" y1="105" x2="135" y2="115" stroke="#263746" stroke-width="2"/>
+   <line x1="450" y1="105" x2="355" y2="115" stroke="#263746" stroke-width="2"/>
+   <line x1="450" y1="105" x2="575" y2="115" stroke="#263746" stroke-width="2"/>
+   <line x1="450" y1="105" x2="780" y2="115" stroke="#263746" stroke-width="2"/>
+   <text x="135" y="215" text-anchor="middle" class="txt">4 tipos</text>
+   <text x="355" y="215" text-anchor="middle" class="txt">es un</text>
+   <text x="575" y="215" text-anchor="middle" class="txt">símbolos</text>
+   <text x="780" y="215" text-anchor="middle" class="txt">sustitución</text>
+  </svg>
+ </div>
+</section>
+
+</main>
+
+<footer>Diseño y Programación Orientada a Objetos · Relaciones entre clases · Herencia · UML · LSP</footer>
+
+<script>
+(function(){
+ const go=[...document.querySelectorAll("[data-go]")];
+ go.forEach(b=>b.addEventListener("click",()=>document.getElementById(b.dataset.go)?.scrollIntoView({behavior:"smooth"})));
+
+ const info={
+  asociacion:"<strong>Asociación:</strong> línea continua. Las clases se relacionan, pero ninguna depende de la existencia de la otra. Ejemplo: Profesor y Curso.",
+  dependencia:"<strong>Dependencia:</strong> línea discontinua con flecha abierta. Una clase utiliza a otra para una operación, por ejemplo como parámetro.",
+  agregacion:"<strong>Agregación:</strong> línea continua con rombo vacío en el extremo del todo. Las partes pueden seguir existiendo fuera del todo.",
+  composicion:"<strong>Composición:</strong> línea continua con rombo lleno en el extremo del todo. Las partes dependen de la existencia del todo."
+ };
+ document.querySelectorAll(".relbtn").forEach(c=>c.addEventListener("click",()=>{
+   document.querySelectorAll(".relbtn").forEach(x=>x.classList.remove("selected"));
+   c.classList.add("selected");
+   document.getElementById("introInfo").innerHTML=info[c.dataset.rel];
+ }));
+
+ document.querySelectorAll("[data-rel-tab]").forEach(b=>b.addEventListener("click",()=>{
+   document.querySelectorAll("[data-rel-tab]").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+   document.querySelectorAll(".relpanel").forEach(x=>x.style.display="none");
+   document.getElementById("rel-"+b.dataset.relTab).style.display="block";
+ }));
+
+ document.querySelectorAll("[data-code]").forEach(b=>b.addEventListener("click",()=>{
+   const p=b.parentElement;b.parentElement.querySelectorAll("[data-code]").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+   document.querySelectorAll("#java .tab").forEach(x=>x.classList.remove("active"));
+   document.getElementById(b.dataset.code).classList.add("active");
+ }));
+
+ document.querySelectorAll(".quiz").forEach(b=>b.addEventListener("click",()=>{
+   const q=b.dataset.q, ok=b.dataset.correct==="1";
+   document.querySelectorAll('.quiz[data-q="'+q+'"]').forEach(x=>x.classList.remove("correct","wrong"));
+   b.classList.add(ok?"correct":"wrong");
+   const r=document.getElementById("r"+q);
+   r.textContent=ok?"✓ Correcto.":"✗ Revisa nuevamente la representación.";
+   r.style.color=ok?"#157347":"#b42318";
+ }));
+
+ document.querySelectorAll(".flipwrap").forEach(x=>x.addEventListener("click",()=>x.classList.toggle("flipped")));
+
+ const sections=[...document.querySelectorAll("header[id],section[id]")];
+ window.addEventListener("scroll",()=>{
+   let cur="inicio";sections.forEach(s=>{if(scrollY>=s.offsetTop-130)cur=s.id});
+   go.forEach(b=>b.classList.toggle("active",b.dataset.go===cur));
+ });
+})();
+</script>
+</body>
+</html>
